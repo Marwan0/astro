@@ -16,14 +16,14 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013180089520}
-  - 54: {fileID: 54000011933080676}
-  - 136: {fileID: 136000014031164936}
-  - 114: {fileID: 114000010148943040}
-  - 114: {fileID: 114000011480183156}
-  - 114: {fileID: 114000011187234838}
+  - component: {fileID: 4000013180089520}
+  - component: {fileID: 54000011933080676}
+  - component: {fileID: 136000014031164936}
+  - component: {fileID: 114000010148943040}
+  - component: {fileID: 114000011480183156}
+  - component: {fileID: 114000011187234838}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -36,12 +36,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011676783040}
-  - 20: {fileID: 20000011390030122}
-  - 81: {fileID: 81000013914621138}
-  - 124: {fileID: 124000012385120282}
+  - component: {fileID: 4000011676783040}
+  - component: {fileID: 20000011390030122}
+  - component: {fileID: 81000013914621138}
+  - component: {fileID: 124000012385120282}
   m_Layer: 0
   m_Name: FirstPersonCharacter
   m_TagString: MainCamera
@@ -58,10 +58,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013180089520}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000013180089520
 Transform:
   m_ObjectHideFlags: 1
@@ -71,11 +71,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 187.5, y: 375, z: 187.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011676783040}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20000011390030122
 Camera:
   m_ObjectHideFlags: 1
@@ -159,19 +159,20 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 256
-  size: 15
   distance: 30
   range: 3
-  strenght: 0.01
+  strenght: 0.003
   brush:
     serializedVersion: 2
     m_Curve:
-    - time: 0
+    - serializedVersion: 2
+      time: 0
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-    - time: 1
+    - serializedVersion: 2
+      time: 1
       value: 0
       inSlope: -3.209479
       outSlope: -3.209479
