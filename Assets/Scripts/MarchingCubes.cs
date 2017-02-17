@@ -1,122 +1,186 @@
-
-
 public class MarchingCubes
 {
+    //--Buffer--
     public MeshBuffer mb;
 
-    private int size, rS;
+    //--Main Settings--
     private float target;
     private int[] order;
 
-    private TVector3[] edgeVertex = new TVector3[12];
+    //--Neighbour Chunks--
+    private Chunk neighbourX, neighbourY, neighbourZ, neighbourXY, neighbourXZ, neighbourZY, neighbourXYZ;
 
-    public MarchingCubes(int size, float target, int[] order)
+    //--Vertex Edges--
+    private TVector3[] edgeVertex;
+
+    //==========Constructor==========
+
+    public MarchingCubes(float target, int[] order)
     {
         mb = new MeshBuffer();
 
-        this.size = size;
-        rS = size + 1;
         this.target = target;
         this.order = order;
+
+        edgeVertex = new TVector3[12];
 
         for (int e = 0; e < 12; e++)
             edgeVertex[e] = new TVector3();
     }
 
-	public void CreateMesh(float[] field)
+    //==========Public Methods==========
+
+    public void SetNeighbourChunks(Chunk neighbourX, Chunk neighbourY, Chunk neighbourZ, Chunk neighbourXY, Chunk neighbourXZ, Chunk neighbourZY, Chunk neighbourXYZ)
+    {
+        this.neighbourX = neighbourX;
+        this.neighbourY = neighbourY;
+        this.neighbourZ = neighbourZ;
+        this.neighbourXY = neighbourXY;
+        this.neighbourXZ = neighbourXZ;
+        this.neighbourZY = neighbourZY;
+        this.neighbourXYZ = neighbourXYZ;
+    }
+
+    public void CreateMesh(float[,,] field)
 	{
         mb.Clear();
 
 		float[] cube = new float[8];
 		
-		for(int x = 0; x < size; x++)
-			for(int y = 0; y < size; y++)
-				for(int z = 0; z < size; z++)
+		for(int x = 0; x < field.GetLength(0); x++)
+			for(int y = 0; y < field.GetLength(1); y++)
+				for(int z = 0; z < field.GetLength(2); z++)
 				{
                     FillCube(x, y, z, field, cube);
 					MarchCube(x, y, z, cube);
                 }
 	}
-	
-	void FillCube(int x, int y, int z, float[] field, float[] cube)
+
+    //==========Private Methods==========
+
+    private void FillCube(int currX, int currY, int currZ, float[,,] field, float[] cube)
 	{
+        if (neighbourX == null || neighbourY == null || neighbourZ == null || neighbourXY == null || neighbourXZ == null || neighbourZY == null || neighbourXYZ == null)
+            return;
+
+        int size = field.GetLength(0);
+
 		for(int i = 0; i < 8; i++)
-			cube[i] = field[(x + vertexOffset[i,0]) + (y + vertexOffset[i,1]) * rS + (z + vertexOffset[i,2]) * rS * rS];
-	}
-	
-	float GetOffset(float v1, float v2)
+        {
+            int x = currX + vertexOffset[i, 0];
+            int y = currY + vertexOffset[i, 1];
+            int z = currZ + vertexOffset[i, 2];
+
+            if(x < size && y < size && z < size)
+            {
+                cube[i] = field[x, y, z];
+            }
+            else
+            {
+                if (x >= size && y < size && z < size)
+                    cube[i] = neighbourX.field[0, y, z];
+
+                if (y >= size && x < size && z < size)
+                    cube[i] = neighbourY.field[x, 0, z];
+
+                if (z >= size && x < size && y < size)
+                    cube[i] = neighbourZ.field[x, y, 0];
+
+
+
+                if (x >= size && y >= size && z < size)
+                    cube[i] = neighbourXY.field[0, 0, z];
+
+                if (x >= size && z >= size && y < size)
+                    cube[i] = neighbourXZ.field[0, y, 0];
+
+                if (z >= size && y >= size && x < size)
+                    cube[i] = neighbourZY.field[x, 0, 0];
+
+
+
+                if (x >= size && y >= size && z >= size)
+                    cube[i] = neighbourXYZ.field[0, 0, 0];
+            }
+        }
+    }
+
+    private float GetOffset(float v1, float v2)
 	{
 	    float delta = v2 - v1;
 	    return (delta == 0.0f) ? 0.5f : (target - v1)/delta;
 	}
-	
-	void MarchCube(int x, int y, int z, float[] cube)
+
+    private void MarchCube(int x, int y, int z, float[] cube)
 	{
 		int i, j, vert, idx;
 		int flagIndex = 0;
-		float offset = 0.0f;
+		float offset = 0f;
 
         for (int e = 0; e < 12; e++)
             edgeVertex[e] = new TVector3();
 
         for (i = 0; i < 8; i++)
-            if (cube[i] <= target)
+            if (cube[i] < target)
                 flagIndex |= 1 << i;
 	
 	    int edgeFlags = cubeEdgeFlags[flagIndex];
-	    if(edgeFlags == 0)
+	    if (edgeFlags == 0)
             return;
 	
 	    for(i = 0; i < 12; i++)
 	    {
-	        if((edgeFlags & (1<<i)) != 0)
+	        if((edgeFlags & (1 << i)) != 0)
 	        {
-	         	offset = GetOffset(cube[edgeConnection[i,0]], cube[edgeConnection[i,1]]);
+	         	offset = GetOffset(cube[edgeConnection[i, 0]], cube[edgeConnection[i, 1]]);
 	
-                edgeVertex[i].X = x + (vertexOffset[edgeConnection[i,0],0] + offset * edgeDirection[i,0]);
-                edgeVertex[i].Y = y + (vertexOffset[edgeConnection[i,0],1] + offset * edgeDirection[i,1]);
-                edgeVertex[i].Z = z + (vertexOffset[edgeConnection[i,0],2] + offset * edgeDirection[i,2]);
+                edgeVertex[i].X = x + (vertexOffset[edgeConnection[i, 0], 0] + offset * edgeDirection[i, 0]);
+                edgeVertex[i].Y = y + (vertexOffset[edgeConnection[i, 0], 1] + offset * edgeDirection[i, 1]);
+                edgeVertex[i].Z = z + (vertexOffset[edgeConnection[i, 0], 2] + offset * edgeDirection[i, 2]);
 	        }
 	    }
 	
 	    for(i = 0; i < 5; i++)
 	    {
-            if(triangleConnectionTable[flagIndex,3*i] < 0)
+            if(triangleConnectionTable[flagIndex, 3 * i] < 0)
                 break;
 			
 			idx = mb.vertices.Count;
 
             for(j = 0; j < 3; j++)
             {
-                vert = triangleConnectionTable[flagIndex,3*i+j];
+                vert = triangleConnectionTable[flagIndex, 3 * i + j];
 
-				mb.triangles.Add(idx+ order[j]);
+				mb.triangles.Add(idx + order[j]);
                 mb.vertices.Add(edgeVertex[vert]);
             }
 	    }
     }
 
-	int[,] vertexOffset = new int[,]
+    //==========Private Tables==========
+
+    #region Tables
+    private int[,] vertexOffset = new int[,]
 	{
 	    {0, 0, 0},{1, 0, 0},{1, 1, 0},{0, 1, 0},
 	    {0, 0, 1},{1, 0, 1},{1, 1, 1},{0, 1, 1}
 	};
 
-	int[,] edgeConnection = new int[,] 
+    private int[,] edgeConnection = new int[,] 
 	{
 	    {0,1}, {1,2}, {2,3}, {3,0},
 	    {4,5}, {5,6}, {6,7}, {7,4},
 	    {0,4}, {1,5}, {2,6}, {3,7}
 	};
-	
-	float[,] edgeDirection = new float[,]
+
+    private float[,] edgeDirection = new float[,]
 	{
 	    {1.0f, 0.0f, 0.0f},{0.0f, 1.0f, 0.0f},{-1.0f, 0.0f, 0.0f},{0.0f, -1.0f, 0.0f},
 	    {1.0f, 0.0f, 0.0f},{0.0f, 1.0f, 0.0f},{-1.0f, 0.0f, 0.0f},{0.0f, -1.0f, 0.0f},
 	    {0.0f, 0.0f, 1.0f},{0.0f, 0.0f, 1.0f},{ 0.0f, 0.0f, 1.0f},{0.0f,  0.0f, 1.0f}
 	};
-	
-	int[] cubeEdgeFlags = new int[]
+
+    private int[] cubeEdgeFlags = new int[]
 	{
 		0x000, 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c, 0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00, 
 		0x190, 0x099, 0x393, 0x29a, 0x596, 0x49f, 0x795, 0x69c, 0x99c, 0x895, 0xb9f, 0xa96, 0xd9a, 0xc93, 0xf99, 0xe90, 
@@ -395,4 +459,5 @@ public class MarchingCubes
 	    {0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
 	    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
 	};
+    #endregion
 }

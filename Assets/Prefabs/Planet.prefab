@@ -16,10 +16,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000011170569508}
-  - 114: {fileID: 114000014018612972}
+  - component: {fileID: 4000011170569508}
+  - component: {fileID: 114000014018612972}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -32,12 +32,12 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000010787461712}
-  - 33: {fileID: 33000012514235428}
-  - 23: {fileID: 23000011169929472}
-  - 114: {fileID: 114000013316838350}
+  - component: {fileID: 4000010787461712}
+  - component: {fileID: 33000012514235428}
+  - component: {fileID: 23000011169929472}
+  - component: {fileID: 114000013316838350}
   m_Layer: 0
   m_Name: Fog
   m_TagString: Untagged
@@ -54,10 +54,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000011170569508}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4000011170569508
 Transform:
   m_ObjectHideFlags: 1
@@ -67,11 +67,11 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000010787461712}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23000011169929472
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -86,7 +86,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 7c49054c45eae2e428d1688763ee7322, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -94,7 +96,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -137,21 +139,23 @@ MonoBehaviour:
   showField: 1
   showChunks: 0
   debugChunks: 0
-  debugCache: 0
   enableFog: 1
   player: {fileID: 0}
   fog: {fileID: 4000010787461712}
   mat: {fileID: 2100000, guid: a5e0b02a8b6373442bb449dbad5709db, type: 2}
   layerMask: 8
-  num: 25
+  num: 11
   size: 15
-  startHeight: 70
-  noiseType: 2
-  noiseComputer: {fileID: 7200000, guid: 5d5c096dca8bf454a8547fbc0793d8ea, type: 3}
+  startHeight: 25
   seed: 
-  frequency: 0.02
-  lacunarity: 2
+  frq: 0.01
+  oct: 4
+  lac: 2
   gain: 0.5
-  amplitude: 10
+  amp: 10
+  noiseType: 5
+  interp: 0
+  fractalType: 0
+  cellDistFunc: 0
+  cellReturnType: 2
   gravity: -10
-  radius: 6

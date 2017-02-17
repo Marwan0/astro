@@ -5,7 +5,7 @@ using UnityEditor;
 public class PlanetInspector : Editor {
 
     private Planet planet;
-    private string file = "Assets/Planets/MyAwesomeFile.dat";
+    private string file = "Assets/ScalarData/Planets/MyAwesomeFile.dat";
 
     public override void OnInspectorGUI()
     {
@@ -27,14 +27,18 @@ public class PlanetInspector : Editor {
         {
             planet.BuildAsync();
         }
+        if (GUILayout.Button("Clear"))
+        {
+            planet.Clear();
+        }
         if (GUILayout.Button("Save Fields"))
         {
-            PlanetHelper.Save(planet.num, file, planet.chunks);
+            PlanetUtils.Save(planet.num, file, planet.chunks);
         }
 
         if(GUILayout.Button("Load Fields"))
         {
-            PlanetHelper.Load(planet.num, file, planet.chunks);
+            PlanetUtils.Load(planet.num, file, planet.chunks);
         }
         GUILayout.EndHorizontal();
 
