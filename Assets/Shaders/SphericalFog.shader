@@ -1,6 +1,6 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "FX/Spherical Fog" {
+Shader "Custom/Spherical Fog" {
 	Properties {
 		_FogBaseColor ("Fog Base Color", Color) = (0,1,1,1)
 		_FogDenseColor ("Fog Dense Color", Color) = (1,1,1,1)

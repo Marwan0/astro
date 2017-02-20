@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/TestArea.unity
+- path: Assets/Scenes/ConverterTestArea.unity
   isLoaded: 1
   isActive: 1
